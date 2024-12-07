@@ -10,3 +10,9 @@ type Event = {
     location: string;
     date: string;
 }
+
+type Admin = {
+    id: number;
+    name: string;
+    username: string;
+}
