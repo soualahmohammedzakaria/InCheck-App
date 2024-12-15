@@ -1,4 +1,5 @@
 import { colors } from "@/constants/colors";
+import { formatDate } from "@/utils/utils";
 import {
   Entypo,
   FontAwesome6,
@@ -8,15 +9,8 @@ import { useRouter } from "expo-router";
 import React from "react";
 import { Pressable, Text, View } from "react-native";
 
-interface Event {
-  id: number;
-  name: string;
-  date: string;
-  location: string;
-}
-
 interface EventProps {
-  event: Event;
+  event: GDGEvent;
 }
 
 export default function Event({ event }: EventProps) {
@@ -102,7 +96,7 @@ export default function Event({ event }: EventProps) {
               flexWrap: "wrap",
             }}
           >
-            Date: {event.date.split("T")[0]}
+            Date: {formatDate(event.date)}
           </Text>
         </View>
       </View>

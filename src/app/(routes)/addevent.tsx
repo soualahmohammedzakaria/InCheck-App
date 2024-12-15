@@ -27,8 +27,6 @@ export default function AddEvent() {
   const [allMembers, setAllMembers] = useState(true);
   const queryClient = new QueryClient();
 
-  console.log("Invitees", invitees);
-
   const [keyboardOpen, setKeyboardOpen] = useState(false);
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(

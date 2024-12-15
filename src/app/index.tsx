@@ -3,7 +3,7 @@ import FormInput from "@/components/form/FormInput";
 import Button from "@/components/global/Button";
 import { colors } from "@/constants/colors";
 import { MaterialIcons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { handleAuthentication } from "@/api/api";
 import { useState } from "react";
 import {
   Image,
@@ -13,34 +13,11 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Toast } from "react-native-toast-notifications";
 import "../../global.css";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
-  const handleSubmit = async () => {
-    try {
-      // Attempt to login
-      /*const response = await axios.post(`${process.env.EXPO_PUBLIC_SERVER_URI}/auth/login`, {
-        username,
-        password,
-      });*/
-      if (true) {
-        // If login is successful
-        Toast.show("Logged in successfully, welcome back!", {
-          placement: "bottom",
-          type: "success",
-        });
-        router.replace("/(authed)/home");
-      } else {
-      }
-    } catch (error) {
-      console.error(error);
-    }
-    router.replace("/(authed)/home");
-  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
@@ -103,7 +80,7 @@ export default function Login() {
                 secureTextEntry
               />
             </View>
-            <Button title="Login" onPress={handleSubmit} />
+            <Button title="Login" onPress={() => handleAuthentication(username, password)} />
             <Image
               source={require("@/assets/images/gdg.png")}
               style={{ width: 100, height: 50, marginTop: 10 }}

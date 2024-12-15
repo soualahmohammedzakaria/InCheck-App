@@ -46,7 +46,7 @@ export default function Home() {
     return (
       <ActivityIndicator
         size={90}
-        className="flex-1 justify-center items-center"
+        className="flex-1 justify-center items-center bg-white"
       ></ActivityIndicator>
     );
   }
@@ -73,7 +73,7 @@ export default function Home() {
         </ScrollView>
       ) : (
         <View className="flex-1 justify-center">
-          <Text className="text-black text-center text-3xl">
+          <Text style={{fontFamily: "Poppins-SemiBold"}} className="text-black text-center text-3xl">
             Add some events
           </Text>
         </View>
