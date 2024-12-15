@@ -2,11 +2,17 @@ import React from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { colors } from '@/constants/colors';
 import { useRouter } from 'expo-router';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { Toast } from 'react-native-toast-notifications';
 
 export default function Settings() {
   const router = useRouter();
 
   const handleLogout = () => {
+    Toast.show("Logged out successfully!", {
+      placement: "bottom",
+      type: "success",
+    });
     router.replace("/");
   };
 
@@ -14,8 +20,33 @@ export default function Settings() {
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Settings</Text>
       <View style={styles.optionsContainer}>
-        <TouchableOpacity style={styles.option} onPress={handleLogout}>
-          <Text style={styles.optionText}>Log Out</Text>
+        <TouchableOpacity
+          style={{
+            borderRadius: 16,
+            backgroundColor: colors.black,
+            paddingHorizontal: 14,
+            height: 50,
+            flexDirection: 'row',
+            gap: 5,
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+          }}
+          activeOpacity={0.7}
+          onPress={handleLogout}
+        >
+          <Text
+            style={{
+              color: colors.white,
+              fontSize: 20,
+              fontWeight: 'bold',
+              textAlign: 'center',
+              fontFamily: 'Poppins-SemiBold',
+              alignItems: 'center',
+              justifyContent: 'center',
+              }}
+          >Logout</Text>
+          <MaterialIcons name="exit-to-app" size={28} color={colors.white} />
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -27,25 +58,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
     padding: 20,
-    justifyContent: 'flex-start',
   },
   title: {
-    fontSize: 24,
+    fontSize: 30,
+    padding: 20,
+    fontFamily: 'Poppins-SemiBold',
     fontWeight: 'bold',
-    marginBottom: 20,
   },
   optionsContainer: {
-    // Style your options container similar to other screens
-  },
-  option: {
-    padding: 15,
-    backgroundColor: colors.white,
-    alignItems: 'center',
-    borderRadius: 5,
-    marginBottom: 10,
-  },
-  optionText: {
-    color: colors.white,
-    fontSize: 16,
-  },
+    gap: 10,
+    marginHorizontal: 23,
+  }
 });
