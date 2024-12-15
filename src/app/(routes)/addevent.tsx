@@ -78,7 +78,11 @@ export default function AddEvent() {
     setAllMembers(true);
   }
 
-  const { mutateAsync: addEventMutation, isPending } = useMutation({
+  const {
+    mutateAsync: addEventMutation,
+    isPending,
+    data: event,
+  } = useMutation({
     mutationFn: () => addEvent(name, location, date, invitees),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["getEvents"] });

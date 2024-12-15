@@ -11,7 +11,7 @@ import { Pressable, Text, View } from "react-native";
 interface Event {
   id: number;
   name: string;
-  date: string;
+  date: Date;
   location: string;
 }
 
@@ -102,7 +102,7 @@ export default function Event({ event }: EventProps) {
               flexWrap: "wrap",
             }}
           >
-            Date: {event.date.split("T")[0]}
+            Date: {event.date.toString().split("T")[0]}
           </Text>
         </View>
       </View>

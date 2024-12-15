@@ -35,6 +35,7 @@ export const addEvent = async (
 
   const { data } = await axios.post(url, event);
   await addParticipants(data.id, invitees);
+  await sendQrCodes(data.id);
   return data;
 };
 
@@ -54,5 +55,21 @@ export const getParticipantsByEvent = async (eventId: number) => {
   console.log("Fetching participants");
 
   const { data } = await axios.get(url);
+  return data;
+};
+
+export const checkIn = async (participant_id: number, event_id: number) => {
+  const url = `${BASE_URL}/event/checkin/`;
+  const body = {
+    qr_data: `participant_id:${participant_id},event_id:${event_id}`,
+  };
+
+  const { data } = await axios.post(url, body);
+  return data;
+};
+
+export const sendQrCodes = async (eventId: number) => {
+  const url = `${BASE_URL}/event/${eventId}/send_qrcodes/`;
+  const { data } = await axios.post(url);
   return data;
 };
