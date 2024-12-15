@@ -57,6 +57,10 @@ export default function AddEvent() {
       try {
         await addEventMutation();
         router.replace("/home");
+        Toast.show("Event added successfully!", {
+          placement: "bottom",
+          type: "success",
+        });
       } catch (error) {
         Toast.show("Error please try again", {
           placement: "bottom",
@@ -76,7 +80,11 @@ export default function AddEvent() {
     setAllMembers(true);
   }
 
-  const { mutateAsync: addEventMutation, isPending } = useMutation({
+  const {
+    mutateAsync: addEventMutation,
+    isPending,
+    data: event,
+  } = useMutation({
     mutationFn: () => addEvent(name, location, date, invitees),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["getEvents"] });

@@ -20,7 +20,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.zaxy17.InCheck"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -31,6 +32,14 @@
     "experiments": {
       "typedRoutes": true,
       "tsconfigPaths": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "67ab89fd-d19c-48f8-abe1-28103c06be91"
+      }
     }
   }
 }

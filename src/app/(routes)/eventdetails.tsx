@@ -1,6 +1,7 @@
 import { getParticipantsByEvent } from "@/api/api";
 import Button from "@/components/global/Button";
 import { colors } from "@/constants/colors";
+import { formatDate } from "@/utils/utils";
 import {
   Entypo,
   FontAwesome6,
@@ -9,7 +10,7 @@ import {
 import { SearchBar } from "@rneui/themed";
 import { useQuery } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Pressable,
@@ -22,20 +23,27 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function EventDetails() {
   const { event: paramsEvent } = useLocalSearchParams();
   const event = JSON.parse(paramsEvent as string);
+  const eventId = event.id;
 
   const {
     data: participants,
     isLoading,
+    isSuccess,
     error,
     refetch,
   } = useQuery({
     queryFn: () => getParticipantsByEvent(event.id),
-    queryKey: ["getEvents"],
-    staleTime: Infinity,
+    queryKey: ["getParticipants", { eventId }],
   });
 
   const [participantsFilter, setParticipantsFilter] = useState("");
-  const [filtredParticipants, setfiltredParticipants] = useState(participants);
+  const [filtredParticipants, setfiltredParticipants] = useState([]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setfiltredParticipants(participants);
+    }
+  }, [participants]);
 
   const filterParticipants = (newValue: string) => {
     setParticipantsFilter(newValue);
@@ -130,7 +138,7 @@ export default function EventDetails() {
               flexWrap: "wrap",
             }}
           >
-            Date: {event.date.split("T")[0]}
+            Date: {formatDate(event.date)}
           </Text>
         </View>
         <Button
@@ -141,13 +149,27 @@ export default function EventDetails() {
               params: { event_id: event.id.toString() },
             })
           }
-          //disabled={event.date < new Date()}
+          disabled={event.date < new Date()}
         />
 
         <SearchBar
           placeholder="Search Participant"
           onChangeText={filterParticipants}
           value={participantsFilter}
+          inputStyle={{
+            color: colors.black,
+            fontFamily: "Poppins-Medium",
+          }}
+          containerStyle={{
+            backgroundColor: colors.white,
+            borderBottomColor: 'transparent',
+            borderTopColor: 'transparent',
+            paddingHorizontal: 0,
+          }}
+          inputContainerStyle={{
+            backgroundColor: colors.lightGrey,
+            borderRadius: 10,
+          }}
         />
 
         <View
@@ -190,21 +212,23 @@ export default function EventDetails() {
               }}
             >
               <Text style={{ fontSize: 16, fontFamily: "Poppins-SemiBold" }}>
-                {participant.participant.first_name}
+                {participant.participant.first_name}{" "}
+                {participant.participant.last_name}
               </Text>
               <Text
                 style={{
                   fontSize: 16,
                   fontFamily: "Poppins-SemiBold",
                   color:
-                    participant.status === "Present"
+                    participant.status === "present"
                       ? "green"
-                      : participant.status === "Absent"
+                      : participant.status === "absent"
                       ? "red"
                       : colors.black,
                 }}
               >
-                {participant.status}
+                {participant.status.charAt(0).toLocaleUpperCase() +
+                  participant.status.slice(1)}
               </Text>
             </View>
           ))}
