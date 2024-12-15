@@ -2,7 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
-import { Text } from "react-native";
+import { LogBox, Text } from "react-native";
 import { ToastProvider } from "react-native-toast-notifications";
 
 const queryClient = new QueryClient();
@@ -12,6 +12,13 @@ export default function App() {
     "Poppins-SemiBold": require("@/assets/fonts/Poppins-SemiBold.ttf"),
     "Poppins-Medium": require("@/assets/fonts/Poppins-Medium.ttf"),
   });
+
+  useEffect(() => {
+    LogBox.ignoreAllLogs(true);
+    if (fontsLoaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, error]);
 
   useEffect(() => {
     if (error) throw error;
