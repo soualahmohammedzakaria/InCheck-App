@@ -1,4 +1,6 @@
 import axios from "axios";
+import { router } from "expo-router";
+import { Toast } from "react-native-toast-notifications";
 
 const BASE_URL = `${process.env.EXPO_PUBLIC_SERVER_URI}`;
 
@@ -55,4 +57,42 @@ export const getParticipantsByEvent = async (eventId: number) => {
 
   const { data } = await axios.get(url);
   return data;
+};
+
+export const handleAuthentication = async (username: string, password: string) => {
+  router.replace("/(authed)/home");
+  return ;
+  try {
+    // Attempt to login
+    const response = await axios.post(`${BASE_URL}/auth/login`, {
+      username,
+      password,
+    });
+    if (response.status === 200) {
+      // If login is successful
+      Toast.show("Logged in successfully, welcome back!", {
+        placement: "bottom",
+        type: "success",
+      });
+      router.replace("/(authed)/home");
+    } else if (response.status === 401) {
+      // Invalid Credentials
+      Toast.show("Invalid Credentials", {
+        placement: "bottom",
+        type: "danger",
+      });
+    } else {
+      // Other errors
+      Toast.show("There was an error", {
+        placement: "bottom",
+        type: "danger",
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    Toast.show("There was an error", {
+      placement: "bottom",
+      type: "danger",
+    });
+  }
 };
