@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Platform } from 'react-native';
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
-import Button from '../global/Button';
-import { colors } from '@/constants/colors';
+import { colors } from "@/constants/colors";
+import DateTimePicker, {
+  DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
+import React, { useState } from "react";
+import { Platform, Text, TouchableOpacity, View } from "react-native";
 
 interface DatePickerProps {
   title: string;
@@ -10,22 +11,27 @@ interface DatePickerProps {
   onValueChange: (date: Date) => void;
 }
 
-export default function DatePicker({ title, value, onValueChange }: DatePickerProps) {
+export default function DatePicker({
+  title,
+  value,
+  onValueChange,
+}: DatePickerProps) {
   const [showPicker, setShowPicker] = useState(false);
 
   const handleChange = (event: DateTimePickerEvent, selectedDate?: Date) => {
-    if (selectedDate) {
+    if (event.type === "set" && selectedDate) {
+      // Only call onValueChange when the user actually selects a date
       onValueChange(selectedDate);
     }
+    setShowPicker(false);
   };
 
   const formattedDate = value.toLocaleDateString();
-  const formattedTime = value.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
   return (
     <View
       style={{
-        flexDirection: 'column',
+        flexDirection: "column",
         gap: 5,
       }}
     >
@@ -34,8 +40,8 @@ export default function DatePicker({ title, value, onValueChange }: DatePickerPr
           fontSize: 20,
           marginLeft: 5,
           color: colors.black,
-          fontWeight: 'bold',
-          fontFamily: 'Poppins-SemiBold',
+          fontWeight: "bold",
+          fontFamily: "Poppins-SemiBold",
         }}
       >
         {title}
@@ -48,17 +54,17 @@ export default function DatePicker({ title, value, onValueChange }: DatePickerPr
           backgroundColor: colors.lightGrey,
           padding: 14,
           height: 50,
-          justifyContent: 'center',
+          justifyContent: "center",
         }}
       >
         <Text
           style={{
-            fontFamily: 'Poppins-Medium',
-            color: value ? colors.black : 'darkgray',
+            fontFamily: "Poppins-Medium",
+            color: value ? colors.black : "darkgray",
             fontSize: 16,
           }}
         >
-          {value ? `${formattedDate} ${formattedTime}` : 'Select date and time'}
+          {value ? `${formattedDate}` : "Select date"}
         </Text>
       </TouchableOpacity>
 
@@ -66,12 +72,11 @@ export default function DatePicker({ title, value, onValueChange }: DatePickerPr
         <>
           <DateTimePicker
             value={value}
-            mode="datetime"
+            mode="date"
             minimumDate={new Date()}
-            display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+            display={Platform.OS === "ios" ? "spinner" : "default"}
             onChange={handleChange}
           />
-          <Button title="Done" onPress={() => setShowPicker(false)} />
         </>
       )}
     </View>

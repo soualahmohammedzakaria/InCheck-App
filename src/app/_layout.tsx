@@ -1,14 +1,16 @@
-import { SplashScreen, Stack } from 'expo-router';
-import { Text } from 'react-native';
-import { useFonts } from 'expo-font';
-import { useEffect } from 'react';
-import { ToastProvider } from 'react-native-toast-notifications';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useFonts } from "expo-font";
+import { SplashScreen, Stack } from "expo-router";
+import { useEffect } from "react";
+import { Text } from "react-native";
+import { ToastProvider } from "react-native-toast-notifications";
+
+const queryClient = new QueryClient();
 
 export default function App() {
-  
   const [fontsLoaded, error] = useFonts({
-    'Poppins-SemiBold': require('@/assets/fonts/Poppins-SemiBold.ttf'),
-    'Poppins-Medium': require('@/assets/fonts/Poppins-Medium.ttf'),
+    "Poppins-SemiBold": require("@/assets/fonts/Poppins-SemiBold.ttf"),
+    "Poppins-Medium": require("@/assets/fonts/Poppins-Medium.ttf"),
   });
 
   useEffect(() => {
@@ -25,17 +27,28 @@ export default function App() {
 
   return (
     <ToastProvider
-      textStyle={{ fontFamily: 'Poppins-Medium' }}
+      textStyle={{ fontFamily: "Poppins-Medium" }}
       successIcon={<Text>✅</Text>}
       dangerIcon={<Text>🚫</Text>}
     >
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="(authed)" options={{ headerShown: false }} />
-        <Stack.Screen name="(routes)/addevent" options={{ headerShown: false }} />
-        <Stack.Screen name="(routes)/eventdetails" options={{ headerShown: false }} />
-        <Stack.Screen name="(routes)/scaneventcode" options={{ headerShown: false }} />
-      </Stack>
+      <QueryClientProvider client={queryClient}>
+        <Stack>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="(authed)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="(routes)/addevent"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="(routes)/eventdetails"
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="(routes)/scaneventcode"
+            options={{ headerShown: false }}
+          />
+        </Stack>
+      </QueryClientProvider>
     </ToastProvider>
   );
 }

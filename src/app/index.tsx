@@ -82,7 +82,6 @@ export default function Login() {
                 color={colors.black}
               />
             </View>
-
             <View
               style={{
                 flexDirection: "column",
@@ -96,7 +95,6 @@ export default function Login() {
                 value={username}
                 onValueChange={setUsername}
               />
-
               <FormInput
                 title="Password"
                 placeholder="Enter your password"
@@ -105,9 +103,7 @@ export default function Login() {
                 secureTextEntry
               />
             </View>
-
             <Button title="Login" onPress={handleSubmit} />
-
             <Image
               source={require("@/assets/images/gdg.png")}
               style={{ width: 100, height: 50, marginTop: 10 }}

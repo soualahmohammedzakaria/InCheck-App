@@ -1,18 +1,19 @@
 type User = {
-    id: number;
-    name: string;
-    email: string;
-}
+  id: number;
+  last_name: string;
+  first_name: string;
+  email: string;
+};
 
-type Event = {
-    id: number;
-    name: string;
-    location: string;
-    date: string;
-}
+type GDGEvent = {
+  id: number;
+  name: string;
+  location: string;
+  date: string;
+};
 
 type Admin = {
-    id: number;
-    name: string;
-    username: string;
-}
+  id: number;
+  name: string;
+  username: string;
+};
