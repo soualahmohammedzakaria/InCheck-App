@@ -1,3 +1,4 @@
+import { getParticipantsByEvent } from "@/api/api";
 import Button from "@/components/global/Button";
 import { colors } from "@/constants/colors";
 import {
@@ -6,39 +7,32 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { SearchBar } from "@rneui/themed";
+import { useQuery } from "@tanstack/react-query";
 import { router, useLocalSearchParams } from "expo-router";
 import { useState } from "react";
-import { Pressable, ScrollView, Text, View, ViewStyle } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function EventDetails() {
-  const participants = [
-    { id: 1, name: "John Doe", status: "Present" },
-    { id: 2, name: "Jane Doe", status: "Pending" },
-    { id: 3, name: "John Smith", status: "Absent" },
-    { id: 4, name: "Jane Smith", status: "Present" },
-    { id: 5, name: "John Doe", status: "Present" },
-    { id: 6, name: "Jane Doe", status: "Pending" },
-    { id: 7, name: "John Smith", status: "Absent" },
-    { id: 8, name: "Jane Smith", status: "Present" },
-    { id: 9, name: "John Doe", status: "Present" },
-    { id: 10, name: "Jane Doe", status: "Pending" },
-    { id: 11, name: "John Smith", status: "Absent" },
-    { id: 12, name: "Jane Smith", status: "Present" },
-    { id: 13, name: "John Doe", status: "Present" },
-    { id: 14, name: "Jane Doe", status: "Pending" },
-    { id: 15, name: "John Smith", status: "Absent" },
-    { id: 16, name: "Jane Smith", status: "Present" },
-    { id: 17, name: "John Doe", status: "Present" },
-    { id: 18, name: "Jane Doe", status: "Pending" },
-    { id: 19, name: "John Smith", status: "Absent" },
-    { id: 20, name: "Jane Smith", status: "Present" },
-    { id: 21, name: "John Doe", status: "Present" },
-    { id: 22, name: "Jane Doe", status: "Pending" },
-  ];
-
   const { event: paramsEvent } = useLocalSearchParams();
   const event = JSON.parse(paramsEvent as string);
+
+  const {
+    data: participants,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
+    queryFn: () => getParticipantsByEvent(event.id),
+    queryKey: ["getEvents"],
+    staleTime: Infinity,
+  });
 
   const [participantsFilter, setParticipantsFilter] = useState("");
   const [filtredParticipants, setfiltredParticipants] = useState(participants);
@@ -46,16 +40,33 @@ export default function EventDetails() {
   const filterParticipants = (newValue: string) => {
     setParticipantsFilter(newValue);
     setfiltredParticipants(
-      participants.filter((participant) =>
-        participant.name.toLowerCase().includes(newValue.toLowerCase())
+      participants.filter((participant: ParticipantStatus) =>
+        `${participant.participant.first_name.toLowerCase()} ${participant.participant.last_name.toLowerCase()}`.includes(
+          newValue.toLowerCase()
+        )
       )
     );
   };
 
-  const searchBarContainerStyle: ViewStyle = {
-    backgroundColor: "black",
-    borderRadius: 10,
-  };
+  if (error) {
+    return (
+      <View className="flex-1 justify-center px-6">
+        <Text className="text-black text-center text-3xl mb-6">
+          {error.message}
+        </Text>
+        <Button title="Reload" onPress={() => refetch()} disabled={false} />
+      </View>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <ActivityIndicator
+        size={90}
+        className="flex-1 justify-center items-center"
+      ></ActivityIndicator>
+    );
+  }
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.white }}>
@@ -119,7 +130,7 @@ export default function EventDetails() {
               flexWrap: "wrap",
             }}
           >
-            Date: {event.date}
+            Date: {event.date.split("T")[0]}
           </Text>
         </View>
         <Button
@@ -168,9 +179,9 @@ export default function EventDetails() {
             height: "auto",
           }}
         >
-          {filtredParticipants.map((participant) => (
+          {filtredParticipants.map((participant: ParticipantStatus) => (
             <View
-              key={participant.id}
+              key={participant.participant.id}
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
@@ -179,7 +190,7 @@ export default function EventDetails() {
               }}
             >
               <Text style={{ fontSize: 16, fontFamily: "Poppins-SemiBold" }}>
-                {participant.name}
+                {participant.participant.first_name}
               </Text>
               <Text
                 style={{

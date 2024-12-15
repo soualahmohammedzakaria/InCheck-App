@@ -1,3 +1,4 @@
+import { addEvent, getParticipants } from "@/api/api";
 import AddInvitee from "@/components/form/AddInvitee";
 import DatePicker from "@/components/form/DatePicker";
 import FormInput from "@/components/form/FormInput";
@@ -5,7 +6,6 @@ import Button from "@/components/global/Button";
 import { colors } from "@/constants/colors";
 import { Entypo } from "@expo/vector-icons";
 import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import {
@@ -18,15 +18,6 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Toast } from "react-native-toast-notifications";
-
-const getParticipants = async () => {
-  const url = "http://192.168.1.42:8000/api/event/participants/";
-
-  console.log("Fetching particsipant");
-
-  const { data } = await axios.get(url);
-  return data;
-};
 
 export default function AddEvent() {
   const [name, setName] = useState("");
@@ -53,8 +44,6 @@ export default function AddEvent() {
         setKeyboardOpen(false);
       }
     );
-
-    // Cleanup listeners on component unmount
     return () => {
       keyboardDidShowListener.remove();
       keyboardDidHideListener.remove();
@@ -64,29 +53,6 @@ export default function AddEvent() {
   function onDateChange(date?: Date) {
     setDate(date || new Date());
   }
-
-  const addEvent = async () => {
-    const url = "http://192.168.1.42:8000/api/event/events/";
-    const event = {
-      name: name,
-      location: location,
-      date: date,
-    };
-
-    const { data } = await axios.post(url, event);
-    await addParticipants(data.id);
-    return data;
-  };
-
-  const addParticipants = async (eventId: number) => {
-    const url = `http://192.168.1.42:8000/api/event/events/${eventId}/add-participants/`;
-    const body = {
-      participant_ids: invitees,
-    };
-
-    const { data } = await axios.post(url, body);
-    return data;
-  };
 
   async function handleSubmit() {
     if (name && location && invitees.length !== 0) {
@@ -98,6 +64,7 @@ export default function AddEvent() {
           placement: "bottom",
           type: "failure",
         });
+        console.error(error);
       }
     } else {
       Toast.show("Please fill out all the fields, and select participants", {
@@ -111,16 +78,10 @@ export default function AddEvent() {
     setAllMembers(true);
   }
 
-  const {
-    data: event,
-    mutateAsync: addEventMutation,
-    isPending,
-    isError,
-  } = useMutation({
-    mutationFn: addEvent,
+  const { mutateAsync: addEventMutation, isPending } = useMutation({
+    mutationFn: () => addEvent(name, location, date, invitees),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["getEvents"] });
-      console.log("Added event succefully");
     },
   });
 

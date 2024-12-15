@@ -1,8 +1,8 @@
+import { getEvents } from "@/api/api";
 import Event from "@/components/home/Event";
 import Header from "@/components/home/Header";
 import { colors } from "@/constants/colors";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { usePathname } from "expo-router";
 import React, { useEffect } from "react";
 import {
@@ -13,15 +13,6 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-const getEvents = async () => {
-  const url = "http://192.168.1.42:8000/api/event/events/";
-
-  console.log("Fetching events");
-
-  const { data } = await axios.get(url);
-  return data;
-};
 
 export default function Home() {
   const pathname = usePathname();
@@ -46,7 +37,7 @@ export default function Home() {
         <Text className="text-black text-center text-3xl mb-6">
           {error.message}
         </Text>
-        <Button title="Reload" onPress={refetch} disabled={false} />
+        <Button title="Reload" onPress={() => refetch()} disabled={false} />
       </View>
     );
   }

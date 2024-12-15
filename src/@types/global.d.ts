@@ -5,11 +5,16 @@ type User = {
   email: string;
 };
 
+type ParticipantStatus = {
+  participant: User;
+  status: string;
+};
+
 type GDGEvent = {
   id: number;
   name: string;
   location: string;
-  date: string;
+  date: Date;
 };
 
 type Admin = {
