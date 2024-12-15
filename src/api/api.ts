@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://192.168.1.42:8000/api";
+const BASE_URL = `${process.env.EXPO_PUBLIC_SERVER_URI}`;
 
 export const getEvents = async () => {
   const url = `${BASE_URL}/event/events/`;
