@@ -1,8 +1,12 @@
-import { View, Text, Pressable } from 'react-native';
-import React from 'react';
-import { Entypo, FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import { colors } from '@/constants/colors';
+import { colors } from "@/constants/colors";
+import {
+  Entypo,
+  FontAwesome6,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import React from "react";
+import { Pressable, Text, View } from "react-native";
 
 interface Event {
   id: number;
@@ -20,7 +24,7 @@ export default function Event({ event }: EventProps) {
 
   const handleEventDetails = () => {
     router.push({
-      pathname: '/(routes)/eventdetails',
+      pathname: "/(routes)/eventdetails",
       params: { event: JSON.stringify(event) },
     });
   };
@@ -31,21 +35,21 @@ export default function Event({ event }: EventProps) {
         backgroundColor: colors.lightGrey,
         padding: 15,
         borderRadius: 16,
-        flexDirection: 'column',
+        flexDirection: "column",
       }}
     >
       <Pressable
         style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
+          flexDirection: "row",
+          justifyContent: "space-between",
         }}
         onPress={handleEventDetails}
       >
         <Text
           style={{
             fontSize: 20,
-            fontFamily: 'Poppins-SemiBold',
-            textAlign: 'center',
+            fontFamily: "Poppins-SemiBold",
+            textAlign: "center",
           }}
         >
           {event.name}
@@ -55,42 +59,50 @@ export default function Event({ event }: EventProps) {
       <View
         style={{
           height: 2,
-          width: '99%',
+          width: "99%",
           backgroundColor: colors.grey,
           borderRadius: 20,
-          alignSelf: 'center',
+          alignSelf: "center",
           marginVertical: 8,
         }}
       />
 
-      <View style={{ flexDirection: 'column', gap: 10 }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <FontAwesome6 name="location-crosshairs" size={24} color={colors.black} />
+      <View style={{ flexDirection: "column", gap: 10 }}>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <FontAwesome6
+            name="location-crosshairs"
+            size={24}
+            color={colors.black}
+          />
           <Text
             style={{
-              fontFamily: 'Poppins-SemiBold',
+              fontFamily: "Poppins-SemiBold",
               fontSize: 16,
               marginLeft: 5,
               flexShrink: 1,
-              flexWrap: 'wrap',
+              flexWrap: "wrap",
             }}
           >
             Location: {event.location}
           </Text>
         </View>
 
-        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-          <MaterialCommunityIcons name="calendar" size={25} color={colors.black} />
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <MaterialCommunityIcons
+            name="calendar"
+            size={25}
+            color={colors.black}
+          />
           <Text
             style={{
-              fontFamily: 'Poppins-SemiBold',
+              fontFamily: "Poppins-SemiBold",
               fontSize: 16,
               marginLeft: 5,
               flexShrink: 1,
-              flexWrap: 'wrap',
+              flexWrap: "wrap",
             }}
           >
-            Date: {event.date}
+            Date: {event.date.split("T")[0]}
           </Text>
         </View>
       </View>

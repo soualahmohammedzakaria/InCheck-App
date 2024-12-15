@@ -1,28 +1,33 @@
-import { colors } from '@/constants/colors';
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList, StyleSheet } from 'react-native';
-
-type User = {
-  id: number;
-  name: string;
-  email: string;
-};
+import { colors } from "@/constants/colors";
+import React from "react";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 interface AddInviteeProps {
   users: User[];
-  onInvite: (selectedUsers: number[]) => void;
+  onInvite: (invitees: number[]) => void;
+  invitees: number[];
+  onChangeSelectionMode: (allMembers: boolean) => void;
+  allMembers: boolean;
 }
 
-export default function AddInvitee({ users, onInvite }: AddInviteeProps) {
-  const [selectedOption, setSelectedOption] = useState<string>('all');
-  const [selectedUsers, setSelectedUsers] = useState<number[]>([]);
-
+export default function AddInvitee({
+  users,
+  onInvite,
+  invitees,
+  onChangeSelectionMode,
+  allMembers,
+}: AddInviteeProps) {
   const toggleUserSelection = (id: number) => {
-    const updatedSelectedUsers = selectedUsers.includes(id)
-      ? selectedUsers.filter((userId) => userId !== id)
-      : [...selectedUsers, id];
-    setSelectedUsers(updatedSelectedUsers);
-    onInvite(updatedSelectedUsers);
+    const updatedinvitees = invitees.includes(id)
+      ? invitees.filter((userId) => userId !== id)
+      : [...invitees, id];
+    onInvite(updatedinvitees);
   };
 
   return (
@@ -30,34 +35,39 @@ export default function AddInvitee({ users, onInvite }: AddInviteeProps) {
       <Text style={styles.title}>Invite Users</Text>
       <View style={styles.optionsContainer}>
         <TouchableOpacity
-          style={[styles.option, selectedOption === 'all' && styles.optionSelected]}
+          style={[styles.option, allMembers && styles.optionSelected]}
           onPress={() => {
-            setSelectedOption('all');
+            onChangeSelectionMode(true);
             const allUserIds = users.map((user) => user.id);
-            setSelectedUsers(allUserIds);
             onInvite(allUserIds);
           }}
           activeOpacity={0.7}
         >
-          <Text style={[styles.optionText, selectedOption === 'all' && styles.optionTextSelected]}>
+          <Text
+            style={[styles.optionText, allMembers && styles.optionTextSelected]}
+          >
             Invite all users
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.option, selectedOption === 'select' && styles.optionSelected]}
+          style={[styles.option, !allMembers && styles.optionSelected]}
           onPress={() => {
-            setSelectedOption('select');
-            setSelectedUsers([]);
+            onChangeSelectionMode(false);
             onInvite([]);
           }}
           activeOpacity={0.7}
         >
-          <Text style={[styles.optionText, selectedOption === 'select' && styles.optionTextSelected]}>
+          <Text
+            style={[
+              styles.optionText,
+              !allMembers && styles.optionTextSelected,
+            ]}
+          >
             Select users
           </Text>
         </TouchableOpacity>
       </View>
-      {selectedOption === 'select' && (
+      {!allMembers && (
         <FlatList
           data={users}
           keyExtractor={(item) => item.id.toString()}
@@ -66,7 +76,7 @@ export default function AddInvitee({ users, onInvite }: AddInviteeProps) {
             <TouchableOpacity
               style={[
                 styles.userItem,
-                selectedUsers.includes(item.id) && styles.userItemSelected,
+                invitees.includes(item.id) && styles.userItemSelected,
               ]}
               onPress={() => toggleUserSelection(item.id)}
               activeOpacity={0.7}
@@ -74,10 +84,10 @@ export default function AddInvitee({ users, onInvite }: AddInviteeProps) {
               <Text
                 style={[
                   styles.userName,
-                  selectedUsers.includes(item.id) && styles.userNameSelected,
+                  invitees.includes(item.id) && styles.userNameSelected,
                 ]}
               >
-                {item.name} ({item.email})
+                {item.first_name} {item.last_name} ({item.email})
               </Text>
             </TouchableOpacity>
           )}
@@ -89,7 +99,7 @@ export default function AddInvitee({ users, onInvite }: AddInviteeProps) {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'column',
+    flexDirection: "column",
     gap: 10,
     flex: 1,
     marginTop: -10,
@@ -98,11 +108,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginLeft: 5,
     color: colors.black,
-    fontWeight: 'bold',
-    fontFamily: 'Poppins-SemiBold',
+    fontWeight: "bold",
+    fontFamily: "Poppins-SemiBold",
   },
   optionsContainer: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 10,
   },
   option: {
@@ -111,14 +121,14 @@ const styles = StyleSheet.create({
     height: 50,
     borderRadius: 16,
     backgroundColor: colors.lightGrey,
-    alignItems: 'center',
+    alignItems: "center",
   },
   optionSelected: {
     backgroundColor: colors.black,
   },
   optionText: {
     color: colors.black,
-    fontFamily: 'Poppins-Medium',
+    fontFamily: "Poppins-Medium",
     fontSize: 16,
   },
   optionTextSelected: {
@@ -138,7 +148,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.black,
   },
   userName: {
-    fontFamily: 'Poppins-Medium',
+    fontFamily: "Poppins-Medium",
     fontSize: 16,
     color: colors.black,
   },
