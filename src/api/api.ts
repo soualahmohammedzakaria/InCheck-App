@@ -60,8 +60,6 @@ export const getParticipantsByEvent = async (eventId: number) => {
 };
 
 export const handleAuthentication = async (username: string, password: string) => {
-  router.replace("/(authed)/home");
-  return ;
   try {
     // Attempt to login
     const response = await axios.post(`${BASE_URL}/auth/login`, {
