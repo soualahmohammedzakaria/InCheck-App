@@ -4,16 +4,10 @@ This is a repository for a mobile application to streamline attendance managemen
 
 ## Features
 
-- **Animated Pieces**: Smooth animations for piece movement.
-- **Restart Game**: Restart the game at any time.
-- **Undo Move**: Undo the last move.
-- **Copy PGN**: Copy the game's PGN (Portable Game Notation) for analysis or sharing.
-- **Themes**: Toggle between light and dark themes.
-- **Board Flipping**: Flip the board for each player's perspective.
-- **Game Over Screen**: Display a game over screen with the result.
-- **Promotion Choice**: Choose the piece for pawn promotion.
-- **Special Moves**: Support for castling and en passant moves.
-- **Materiel Advantage**: Calculate the Materiel Advantage in real time.
+- **Authentication**: Securely log in and register with username and password.
+- **View Events**: Browse all events in an organized list
+- **Event Details and Participants**: View detailed information about events, including name, location and date. Check the list of participants attending each event.
+- **Add Event**: Create new events with ease by providing event details like name, location and date.
 
 ## Backend Repository
 
@@ -26,10 +20,10 @@ You can download the game and try it out using this link: [Download](https://bit
 ## Screenshots
 
 <div style="display: flex; flex-wrap: wrap; justify-content: space-around;">
-  <img src=".githubutils/auth.jpg" alt="Auth" width="33%"/>
-  <img src=".githubutils/home.jpg" alt="Home" width="33%"/>
-  <img src=".githubutils/add_event.jpg" alt="Add EVent" width="33%"/>
-  <img src=".githubutils/event_details.jpg" alt="Event Details" width="33%"/>
+  <img src="githubutils/auth.jpg" alt="Auth" width="33%"/>
+  <img src="githubutils/home.jpg" alt="Home" width="33%"/>
+  <img src="githubutils/add_event.jpg" alt="Add EVent" width="33%"/>
+  <img src="githubutils/event_details.jpg" alt="Event Details" width="33%"/>
 </div>
 
 ## Video
