@@ -15,7 +15,7 @@ You can check the backend part of this project via this link: [Backend](https://
 
 ## Download
 
-You can download the game and try it out using this link: [Download](https://bit.ly/incheck-app)
+You can download the app and try it out using this link: [Download](https://bit.ly/incheck-app)
 
 ## Screenshots
 
